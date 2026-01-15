@@ -1,0 +1,447 @@
+DevOps and MLOps Lab Manual
+Engineering Department
+January 2026
+Lab Questions
+1. DevOps and MLOps Lab Manual
+Create a simple User Registration Form for an event with fields (Name, Email, Phone). Initialize a
+Git repository, commit the project files, and push them to GitHub using appropriate Git commands.
+Create a new branch named update-form, modify the registration form by adding a new field
+(Department), merge the branch into main, and push the changes to GitHub. Show the use of: git
+branch, git checkout, git merge, git push.
+2. Your college department is developing a small student portal website hosted on GitHub. As a
+DevOps engineer, you must set up Continuous Integration using Jenkins:
+Task Requirements
+Configure a Jenkins Freestyle Job that automatically pulls the website code from GitHub.
+Enable Jenkins to build the project every time a change is pushed.
+Make a small update to the HTML page, push it to GitHub, and show that Jenkins automatically
+triggers a new build.
+3. Create a simple web application (HTML or Python Flask). Write a Dockerfile, build a Docker
+image, and run the container so the application is accessible on a browser using port mapping.
+Using Docker commands, perform the following operations:
+List images and containers
+Stop a running container
+Remove a container and image
+Demonstrate commands like: docker ps, docker stop, docker rm, docker rmi.
+4. Deploy the previously created Docker image on Kubernetes using a Deployment YAML file. Verify
+that the pod is running using kubectl commands. Expose the application using a NodePort Service,
+access it using the node’s IP and port, and scale the deployment to 3 replicas using kubectl scale.
+5. Set up a simple ML project environment by creating a requirements.txt file, installing packages,
+and verifying environment setup. Document the steps in a Jupyter Notebook and commit it to the
+Git repository.
+6. To design and deploy a multi-container application using Docker Compose by creating an applica-
+tion service and a dependent database/Redis service, configuring service dependencies, networks,
+and volumes, and verifying inter-container communication.
+7. To implement data ingestion, cleaning, and versioning using Data Version Control (DVC) by track-
+ing raw and processed datasets, creating a reproducible pipeline with dvc.yaml, and validating
+reproducibility via dvc repro.
+8. To perform experiment tracking using MLflow by training a machine learning model, logging met-
+rics, parameters, and artifacts, and comparing multiple runs to identify the best-performing model.
+9. To optimize and standardize model inference using ONNX by exporting a trained ML model to
+ONNX format, running inference with ONNX Runtime, and benchmarking performance against
+the native scikit-learn model.
+1
+10. To serve a machine learning model using FastAPI by developing a /predict REST endpoint with
+input validation, writing test cases, containerizing the service, and verifying predictions through
+Postman or curl.
+2
+Prerequisites
+Ensure the following tools are installed and properly configured on your Linux system (Ubuntu-based).
+Commands below assume sudo privileges.
+Git Installation and Verification
+Download & Install:
+1 $ sudo apt update
+2 Hit :1 http :// archive . ubuntu . com / ubuntu noble InRelease
+3 Get :2 http :// archive . ubuntu . com / ubuntu noble - updates InRelease [128 kB ]
+4 ...
+5 Reading package lists ... Done
+6 $ sudo apt install -y git
+7 Reading package lists ... Done
+8 Building dependency tree ... Done
+9 The following NEW packages will be installed :
+10 git git - man ...
+11 After this operation , 45.3 MB of additional disk space will be used .
+12 Do you want to continue ? [ Y / n ] y
+13 ...
+14 Setting up git (1:2.43.0 -1 ubuntu ...) ...
+Verify Version:
+1 $ git -- version
+2 git version 2.43.0
+Docker & Docker Compose
+Download & Install Docker Engine:
+1 $ sudo apt update
+2 $ sudo apt install -y docker . io
+3 Reading package lists ... Done
+4 ...
+5 Setting up docker . io (24.0. x -0 ubuntu ...) ...
+6 Adding group ‘ docker ’ ( GID 998) ...
+Enable & Start Docker Service:
+1 $ sudo systemctl enable docker
+2 Synchronizing state of docker . service with SysV service script ...
+3 $ sudo systemctl start docker
+4 $ sudo systemctl status docker
+5 docker . service - Docker Application Container Engine
+6 Loaded : loaded (/ lib / systemd / system / docker . service ; enabled )
+7 Active : active ( running ) since Tue 2026 -01 -06 10:15:00 IST ; 5 s ago
+8 ...
+Install Docker Compose Plugin (if needed):
+1 $ sudo apt install -y docker - compose
+2 Reading package lists ... Done
+3 ...
+4 Setting up docker - compose (1.29. x -...) ...
+Verify Docker:
+1 $ docker -- version
+2 Docker version 24.0. x , build abcdefg
+3 $ docker - compose -- version
+4 docker - compose version 1.29. x , build hijklmno
+3
+Jenkins
+Download & Install Jenkins (Debian package method summarized):
+1 $ curl - fsSL https :// pkg . jenkins . io / debian - stable / jenkins . io . key \
+2 | sudo tee / usr / share / keyrings / jenkins - keyring . asc > / dev / null
+3 $ echo deb [ signed - by =/ usr / share / keyrings / jenkins - keyring . asc ] \
+4 https :// pkg . jenkins . io / debian - stable binary / | \
+5 sudo tee / etc / apt / sources . list . d / jenkins . list > / dev / null
+6 $ sudo apt update
+7 $ sudo apt install -y openjdk -17 - jre - headless jenkins
+8 Reading package lists ... Done
+9 ...
+10 Setting up jenkins (2. xxx ) ...
+Start Jenkins and Verify:
+1 $ sudo systemctl enable jenkins
+2 $ sudo systemctl start jenkins
+3 $ sudo systemctl status jenkins
+4 jenkins . service - Jenkins Continuous Integration Server
+5 Loaded : loaded (/ lib / systemd / system / jenkins . service ; enabled )
+6 Active : active ( running ) since Tue 2026 -01 -06 10:20:00 IST ; 10 s ago
+7 ...
+Access Jenkins in a browser at:
+1 http :// localhost :8080
+Kubernetes (Minikube Example)
+Download Minikube Binary:
+1 $ curl - LO https :// storage . googleapis . com / minikube / releases / latest / minikube - linux - amd64
+2 % Total % Received % Xferd Average Speed Time Time Time Current
+3 Dload Upload Total Spent Left Speed
+4 100 74.4 M 100 74.4 M 0 0 8.5 M 0 0:00:08 0:00:08 - -: - -: - - 9.0 M
+5 $ sudo install minikube - linux - amd64 / usr / local / bin / minikube
+Start a Local Cluster:
+1 $ minikube start
+2 * minikube v1 .34.0 on Ubuntu 24.04
+3 * Using the docker driver based on existing profile
+4 * Starting control plane node minikube in cluster minikube
+5 ...
+6 * Done ! kubectl is now configured to use " minikube " cluster and " default " namespace
+Verify kubectl (Minikube bundles it or install via apt):
+1 $ kubectl get nodes
+2 NAME STATUS ROLES AGE VERSION
+3 minikube Ready control - plane 5 m1s v1 .29. x
+Python, pip, venv, and Jupyter
+Install Python 3 and pip:
+1 $ sudo apt update
+2 $ sudo apt install -y python3 python3 - pip python3 - venv
+3 Reading package lists ... Done
+4 ...
+5 Setting up python3 (3.12. x -...) ...
+Create Virtual Environment:
+4
+1 $ python3 -m venv ml - env
+2 $ source ml - env / bin / activate
+3 ( ml - env ) $ python -- version
+4 Python 3.12. x
+Install Jupyter and ML Packages:
+1 ( ml - env ) $ python -m pip install -- upgrade pip
+2 ( ml - env ) $ pip install jupyter pandas scikit - learn mlflow fastapi uvicorn dvc
+onnxruntime
+3 Collecting jupyter
+4 Collecting pandas
+5 Collecting scikit - learn
+6 ...
+7 Successfully installed jupyter -1. x pandas -2. x scikit - learn -1. x mlflow -2. x fastapi -0.11 x
+...
+Launch Jupyter Notebook:
+1 ( ml - env ) $ jupyter notebook
+2 [ I 10:30:00.000 NotebookApp ] Serving notebooks from local directory : / home / user / project
+3 [ I 10:30:00.001 NotebookApp ] The Jupyter Notebook is running at :
+4 [ I 10:30:00.001 NotebookApp ] http :// localhost :8888/? token =...
+1 Git Initialization & GitHub Push
+Objective: Create a form and push it to a remote repository.
+File: index.html
+1 <! DOCTYPE html >
+2 < html >
+3 < head > < title > Event Registration </ title > </ head >
+4 < body >
+5 < h2 > Registration Form </ h2 >
+6 < form >
+7 Name : < input type = " text " > < br >
+8 Email : < input type = " email " > < br >
+9 Phone : < input type = " text " > < br >
+10 < button > Submit </ button >
+11 </ form >
+12 </ body >
+13 </ html >
+Terminal Commands & Output
+1 $ git init
+2 Initialized empty Git repository in / home / user / lab1 /. git /
+3 $ git add index . html
+4 $ git commit -m " Initial commit "
+5 [ main ( root - commit ) 4 e2a1b ] Initial commit
+6 1 file changed , 11 insertions (+)
+7 create mode 100644 index . html
+8 $ git remote add origin https :// github . com / username / event - form . git
+9 $ git push -u origin main
+10 Enumerating objects : 3 , done .
+11 Counting objects : 100% (3/3) , done .
+12 Writing objects : 100% (3/3) , 245 bytes | 245.00 KiB /s , done .
+13 To https :// github . com / username / event - form . git
+14 * [ new branch ] main -> main
+15 branch ’ main ’ set up to track ’ origin / main ’.
+5
+2 Git Branching, Merging & Push
+Objective: Add a “Department” field using a feature branch.
+Terminal Commands & Output
+1 $ git branch update - form
+2 $ git checkout update - form
+3 Switched to branch ’ update - form ’
+4 # ( Modify index . html to add < input type =" text " name =" Dept " >)
+5 $ git add index . html
+6 $ git commit -m " Added department field "
+7 [ update - form 7 a2b3c ] Added department field
+8 1 file changed , 1 insertion (+)
+9 $ git checkout main
+10 Switched to branch ’ main ’
+11 $ git merge update - form
+12 Updating 4 e2a1b ..7 a2b3c
+13 Fast - forward
+14 index . html | 1 +
+15 1 file changed , 1 insertion (+)
+16 $ git push origin main
+17 Enumerating objects : 5 , done .
+18 Counting objects : 100% (5/5) , done .
+19 Writing objects : 100% (3/3) , 280 bytes | 280.00 KiB /s , done .
+20 To https :// github . com / username / event - form . git
+21 4 e2a1b ..7 a2b3c main -> main
+3 Jenkins CI Integration
+Objective: Automatically trigger builds on push.
+Terminal Commands & Output
+1 $ echo " " >> index . html
+2 $ git status
+3 On branch main
+4 Changes not staged for commit :
+5 ( use " git add < file >..." to update what will be committed )
+6 modified : index . html
+7
+8 $ git commit - am " Trigger Jenkins "
+9 [ main 9 c1d2e3 ] Trigger Jenkins
+10 1 file changed , 1 insertion (+)
+11 $ git push origin main
+12 To https :// github . com / username / event - form . git
+13 7 a2b3c ..9 c1d2e3 main -> main
+Jenkins Console Log
+1 Started by GitHub push by username
+2 Running as SYSTEM
+3 Building in workspace / var / lib / jenkins / workspace / StudentPortal
+4 > git rev - parse --is - inside - work - tree # timeout =10
+5 Fetching changes from the remote Git repository
+6 > git fetch -- tags -- progress -- origin + refs / heads /*: refs / remotes / origin /*
+7 > git checkout -f origin / main
+8 + echo " Starting Build ..."
+9 Starting Build ...
+10 + ls
+11 index . html Jenkinsfile ...
+12 Finished : SUCCESS
+6
+4 Dockerization of Web App
+Objective: Containerize a Python Flask application.
+File: app.py
+1 from flask import Flask
+2 app = Flask ( __name__ )
+3
+4 @app . route ( ’/ ’)
+5 def hello () :
+6 return " Portal Running ! "
+7
+8 if __name__ == " __main__ " :
+9 app . run ( host = ’ 0.0.0.0 ’ , port =5000)
+File: Dockerfile
+1 FROM python :3.9 - slim
+2 RUN pip install flask
+3 COPY app . py .
+4 CMD [" python " , " app . py "]
+Terminal Commands & Output
+1 $ docker build -t my - app .
+2 Sending build context to Docker daemon 6.144 kB
+3 Step 1/4 : FROM python :3.9 - slim
+4 ---> a1b2c3d4e5f6
+5 Step 2/4 : RUN pip install flask
+6 ---> Running in 123456789 abc
+7 Collecting flask
+8 ...
+9 Successfully built 0 f1e2d3c4b5a
+10 Successfully tagged my - app : latest
+11
+12 $ docker run -d -p 8080:5000 -- name web - container my - app
+13 1 a2b3c4d5e6f7g8h9i0j
+14
+15 $ docker ps
+16 CONTAINER ID IMAGE COMMAND STATUS PORTS
+17 1 a2b3c4d5e6f my - app " python app . py " Up 10 seconds 0.0.0.0:8080 - >5000/ tcp
+18
+19 $ curl http :// localhost :8080
+20 Portal Running !
+5 Docker Operations
+Objective: Demonstrate image and container management.
+Terminal Commands & Output
+1 $ docker ps
+2 CONTAINER ID IMAGE STATUS PORTS NAMES
+3 1 a2b3c4d5e6f my - app Up 2 minutes 0.0.0.0:8080 - >5000/ tcp web - container
+4
+5 $ docker stop web - container
+6 web - container
+7
+8 $ docker rm web - container
+7
+9 web - container
+10
+11 $ docker images
+12 REPOSITORY TAG IMAGE ID CREATED SIZE
+13 my - app latest 0 f1e2d3c4b5a 1 minute ago 125 MB
+14
+15 $ docker rmi my - app
+16 Untagged : my - app : latest
+17 Deleted : sha256 :0 f1e2d3c4b5a ...
+6 Kubernetes Deployment & Scaling
+Objective: Deploy to Kubernetes and scale to 3 replicas.
+File: deployment.yaml
+1 apiVersion : apps / v1
+2 kind : Deployment
+3 metadata :
+4 name : ml - deploy
+5 spec :
+6 replicas : 1
+7 selector :
+8 matchLabels :
+9 app : ml
+10 template :
+11 metadata :
+12 labels :
+13 app : ml
+14 spec :
+15 containers :
+16 - name : ml - container
+17 image : my - app
+18 ports :
+19 - containerPort : 5000
+Terminal Commands & Output
+1 $ kubectl apply -f deployment . yaml
+2 deployment . apps / ml - deploy created
+3
+4 $ kubectl get pods
+5 NAME READY STATUS RESTARTS AGE
+6 ml - deploy -7 f8d9 - abc1 1/1 Running 0 20 s
+7
+8 $ kubectl expose deployment ml - deploy -- type = NodePort -- port =5000
+9 service / ml - deploy exposed
+10
+11 $ kubectl get svc ml - deploy
+12 NAME TYPE CLUSTER - IP EXTERNAL - IP PORT ( S ) AGE
+13 ml - deploy NodePort 10.96.123.45 < none > 5000:31456/ TCP 30 s
+14
+15 # Access via http :// < node - ip >:31456
+16
+17 $ kubectl scale deployment ml - deploy -- replicas =3
+18 deployment . apps / ml - deploy scaled
+19
+20 $ kubectl get pods
+21 NAME READY STATUS RESTARTS AGE
+22 ml - deploy -7 f8d9 - abc1 1/1 Running 0 1 m
+23 ml - deploy -7 f8d9 - abc2 1/1 Running 0 10 s
+24 ml - deploy -7 f8d9 - abc3 1/1 Running 0 10 s
+8
+7 ML Environment Setup
+Objective: Set up environment and document via Jupyter.
+File: requirements.txt
+1 pandas
+2 scikit - learn
+3 mlflow
+4 jupyter
+Terminal Commands & Output
+1 ( ml - env ) $ pip install -r requirements . txt
+2 Collecting pandas
+3 Collecting scikit - learn
+4 Collecting mlflow
+5 Collecting jupyter
+6 ...
+7 Successfully installed jupyter -1. x mlflow -2. x pandas -2. x scikit - learn -1. x
+8
+9 ( ml - env ) $ jupyter notebook
+10 [ I 10:30:00.000 NotebookApp ] Serving notebooks from local directory : / home / user / project
+11 [ I 10:30:00.001 NotebookApp ] The Jupyter Notebook is running at :
+12 [ I 10:30:00.001 NotebookApp ] http :// localhost :8888/? token =...
+8 Docker Compose (Multi-Container)
+Objective: Launch web and Redis services.
+File: docker-compose.yml
+1 services :
+2 app :
+3 build : .
+4 ports : ["5000:5000"]
+5 redis :
+6 image : " redis : alpine "
+Terminal Commands & Output
+1 $ docker - compose up -d
+2 Creating network " lab_default " with the default driver
+3 Creating lab_redis_1 ... done
+4 Creating lab_app_1 ... done
+5
+6 $ docker - compose ps
+7 NAME COMMAND STATUS PORTS
+8 lab_app_1 " python app . py " running 0.0.0.0:5000 - >5000/ tcp
+9 lab_redis_1 " docker - e n t r y p o i n t " running 6379/ tcp
+9 DVC & MLflow Tracking
+Objective: Track data changes and log experiments.
+9
+Terminal Commands & Output
+1 ( ml - env ) $ dvc init
+2 Initialized DVC repository .
+3
+4 ( ml - env ) $ dvc add raw_data . csv
+5 Adding ...
+6 100% Add |
+|1/1 [00:00 , 2.00 file / s ]
+7 To track the changes with git , run :
+8
+9 git add raw_data . csv . dvc . gitignore
+10
+11 ( ml - env ) $ git add raw_data . csv . dvc . gitignore
+12 ( ml - env ) $ git commit -m " Track data v1 "
+13 [ main 1 a2b3c4 ] Track data v1
+14 2 files changed , 5 insertions (+)
+15 create mode 100644 raw_data . csv . dvc
+16
+17 ( ml - env ) $ dvc repro
+18 Data is up to date .
+19
+20 ( ml - env ) $ python train . py
+21 Model trained . Accuracy : 0.92
+22 Logging to MLflow ...
+23
+24 ( ml - env ) $ mlflow ui
+25 INFO [ mlflow . server ] Starting gunicorn 20. x
+26 INFO [ mlflow . server ] Listening at : http ://127.0.0.1:5000 ( pid =1234)
+10 FastAPI Serving & ONNX Optimization
+Objective: REST API for inference and model optimization.
+Terminal Commands & Output
+1 ( ml - env ) $ uvicorn main : app -- reload
+2 INFO : Will watch for changes in these directories : [ ’/ home / user / project ’]
+3 INFO : Uvicorn running on http ://127.0.0.1:8000 ( Press CTRL + C to quit )
+4
+5 $ curl -X POST " http ://127.0.0.1:8000/ predict " \
+6 -H " Content - Type : application / json " \
+7 -d ’{" feature1 ":5 , " feature2 ":10} ’
+8 {" prediction ": 15}
+9
+10 ( ml - env ) $ python convert_onnx . py
+11 Converting model to ONNX ...
+12 Model converted successfully . Saved as ’ model . onnx ’.
+13
+14 ( ml - env ) $ ls - lh model . onnx
+15 -rw -r - -r - - 1 user user 45 K Jan 6 11:00 model . onnx
+10
